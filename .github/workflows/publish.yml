@@ -2,7 +2,7 @@ name: Release
 on:
   push:
     branches:
-      - v2-build
+      - dev
 jobs:
   release:
     name: Release

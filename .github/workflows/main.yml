@@ -1,5 +1,9 @@
 name: Build and Verify
-on: [push, pull_request]
+on:
+  push:
+    branches-ignore: dev
+  pull_request:
+    branches-ignore: dev
 jobs:
   verify:
     name: Verify
