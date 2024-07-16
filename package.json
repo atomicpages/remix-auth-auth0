@@ -71,8 +71,8 @@
     "typescript": "^5.2.2"
   },
   "peerDependencies": {
-    "@remix-run/server-runtime": "1.x || 2.x",
-    "remix-auth": "3.x"
+    "@remix-run/server-runtime": "^1.0.0 || ^2.0.0",
+    "remix-auth": "^3.0.0"
   },
   "engines": {
     "node": ">=18"
