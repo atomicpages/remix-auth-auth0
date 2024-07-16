@@ -1,12 +1,12 @@
+import type { StrategyVerifyCallback } from "remix-auth";
 import { OAuth2Strategy } from "remix-auth-oauth2";
 import type {
   OAuth2Profile,
   OAuth2StrategyVerifyParams,
   TokenResponseBody,
 } from "remix-auth-oauth2";
-import type { StrategyVerifyCallback } from "remix-auth";
 
-export interface Auth0StrategyOptions {
+export type Auth0StrategyOptions = {
   domain: string;
   clientID: string;
   clientSecret: string;
@@ -16,27 +16,27 @@ export interface Auth0StrategyOptions {
   organization?: string;
   invitation?: string;
   connection?: string;
-}
+};
 
 /**
  * @see https://auth0.com/docs/get-started/apis/scopes/openid-connect-scopes#standard-claims
  */
-export type Auth0Scope = "openid" | "profile" | "email" | string;
+export type Auth0Scope = "openid" | "profile" | "email" | (string & {});
 
-export interface Auth0Profile extends OAuth2Profile {
+export type Auth0Profile = {
   _json?: Auth0UserInfo;
   organizationId?: string;
   organizationName?: string;
-}
+} & OAuth2Profile;
 
-export interface Auth0ExtraParams extends Record<string, unknown> {
+export type Auth0ExtraParams = {
   id_token?: string;
   scope: string;
   expires_in: number;
   token_type: "Bearer";
-}
+} & Record<string, unknown>;
 
-interface Auth0UserInfo {
+type Auth0UserInfo = {
   sub?: string;
   name?: string;
   given_name?: string;
@@ -61,11 +61,11 @@ interface Auth0UserInfo {
   updated_at?: string;
   org_id?: string;
   org_name?: string;
-}
+};
 
 export const Auth0StrategyDefaultName = "auth0";
 export const Auth0StrategyDefaultScope: Auth0Scope = "openid profile email";
-export const Auth0StrategyScopeSeperator = " ";
+export const Auth0StrategyScopeSeparator = " ";
 
 export class Auth0Strategy<User> extends OAuth2Strategy<
   User,
@@ -108,7 +108,7 @@ export class Auth0Strategy<User> extends OAuth2Strategy<
     this.invitation = options.invitation;
     this.connection = options.connection;
     this.fetchProfile = this.scope
-      .join(Auth0StrategyScopeSeperator)
+      .join(Auth0StrategyScopeSeparator)
       .includes("openid");
   }
 
@@ -117,14 +117,14 @@ export class Auth0Strategy<User> extends OAuth2Strategy<
     if (!scope) {
       return [Auth0StrategyDefaultScope];
     } else if (typeof scope === "string") {
-      return scope.split(Auth0StrategyScopeSeperator) as Auth0Scope[];
+      return scope.split(Auth0StrategyScopeSeparator);
     }
 
     return scope;
   }
 
   protected authorizationParams(params: URLSearchParams) {
-    params.set("scope", this.scope.join(Auth0StrategyScopeSeperator));
+    params.set("scope", this.scope.join(Auth0StrategyScopeSeparator));
 
     if (this.audience) {
       params.set("audience", this.audience);
@@ -160,7 +160,7 @@ export class Auth0Strategy<User> extends OAuth2Strategy<
       headers: { Authorization: `Bearer ${accessToken}` },
     });
 
-    const data: Auth0UserInfo = await response.json();
+    const data = (await response.json()) as Awaited<Auth0UserInfo>;
 
     profile._json = data;
 
@@ -172,6 +172,7 @@ export class Auth0Strategy<User> extends OAuth2Strategy<
       profile.displayName = data.name;
     }
 
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     if (data.family_name || data.given_name || data.middle_name) {
       profile.name = {};
 

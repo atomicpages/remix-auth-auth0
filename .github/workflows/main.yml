@@ -1,28 +1,27 @@
-name: CI
-
+name: Build and Verify
 on: [push, pull_request]
-
 jobs:
-  build:
-    name: Build
+  verify:
+    name: Verify
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo
+      - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Use Node LTS
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 9
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "lts/*"
-
+          node-version: 20
+          cache: pnpm
       - name: Install dependencies
-        uses: bahmutov/npm-install@v1
-
-      - name: Typecheck
-        run: npm run typecheck
-      - name: Test
-        run: npm run test -- --ci --coverage --maxWorkers=2
+        run: pnpm install --frozen-lockfile
       - name: Lint
-        run: npm run lint
+        run: pnpm lint
+      - name: Test
+        run: pnpm test
+      - name: Typecheck
+        run: pnpm typecheck
       - name: Build
-        run: npm run build
+        run: pnpm build

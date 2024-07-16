@@ -1,10 +1,9 @@
 import { createCookieSessionStorage } from "@remix-run/node";
-import { AuthenticateOptions } from "remix-auth";
-import fetchMock, { enableFetchMocks } from "jest-fetch-mock";
+import type { AuthenticateOptions } from "remix-auth";
+import { beforeEach, describe, expect, test, vi } from "vitest";
 
-import { Auth0Profile, Auth0Strategy } from "../src";
-
-enableFetchMocks();
+import type { Auth0Profile } from "../src";
+import { Auth0Strategy } from "../src";
 
 const BASE_OPTIONS: AuthenticateOptions = {
   name: "form",
@@ -13,14 +12,14 @@ const BASE_OPTIONS: AuthenticateOptions = {
   sessionStrategyKey: "strategy",
 };
 
-describe(Auth0Strategy, () => {
-  const verify = jest.fn();
+describe("Auth0Strategy", () => {
+  const verify = vi.fn();
   const sessionStorage = createCookieSessionStorage({
     cookie: { secrets: ["s3cr3t"] },
   });
 
   beforeEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
     fetchMock.resetMocks();
   });
 
@@ -41,10 +40,14 @@ describe(Auth0Strategy, () => {
     try {
       await strategy.authenticate(request, sessionStorage, BASE_OPTIONS);
     } catch (error) {
-      if (!(error instanceof Response)) throw error;
+      if (!(error instanceof Response)) {
+        throw error;
+      }
       const location = error.headers.get("Location");
 
-      if (!location) throw new Error("No redirect header");
+      if (!location) {
+        throw new Error("No redirect header");
+      }
 
       const redirectUrl = new URL(location);
 
@@ -68,10 +71,14 @@ describe(Auth0Strategy, () => {
     try {
       await strategy.authenticate(request, sessionStorage, BASE_OPTIONS);
     } catch (error) {
-      if (!(error instanceof Response)) throw error;
+      if (!(error instanceof Response)) {
+        throw error;
+      }
       const location = error.headers.get("Location");
 
-      if (!location) throw new Error("No redirect header");
+      if (!location) {
+        throw new Error("No redirect header");
+      }
 
       const redirectUrl = new URL(location);
 
@@ -97,11 +104,15 @@ describe(Auth0Strategy, () => {
     try {
       await strategy.authenticate(request, sessionStorage, BASE_OPTIONS);
     } catch (error) {
-      if (!(error instanceof Response)) throw error;
+      if (!(error instanceof Response)) {
+        throw error;
+      }
 
       const location = error.headers.get("Location");
 
-      if (!location) throw new Error("No redirect header");
+      if (!location) {
+        throw new Error("No redirect header");
+      }
 
       const redirectUrl = new URL(location);
 
@@ -128,10 +139,14 @@ describe(Auth0Strategy, () => {
     try {
       await strategy.authenticate(request, sessionStorage, BASE_OPTIONS);
     } catch (error) {
-      if (!(error instanceof Response)) throw error;
+      if (!(error instanceof Response)) {
+        throw error;
+      }
       const location = error.headers.get("Location");
 
-      if (!location) throw new Error("No redirect header");
+      if (!location) {
+        throw new Error("No redirect header");
+      }
 
       const redirectUrl = new URL(location);
 
@@ -158,10 +173,14 @@ describe(Auth0Strategy, () => {
     try {
       await strategy.authenticate(request, sessionStorage, BASE_OPTIONS);
     } catch (error) {
-      if (!(error instanceof Response)) throw error;
+      if (!(error instanceof Response)) {
+        throw error;
+      }
       const location = error.headers.get("Location");
 
-      if (!location) throw new Error("No redirect header");
+      if (!location) {
+        throw new Error("No redirect header");
+      }
 
       const redirectUrl = new URL(location);
 
@@ -189,10 +208,14 @@ describe(Auth0Strategy, () => {
     try {
       await strategy.authenticate(request, sessionStorage, BASE_OPTIONS);
     } catch (error) {
-      if (!(error instanceof Response)) throw error;
+      if (!(error instanceof Response)) {
+        throw error;
+      }
       const location = error.headers.get("Location");
 
-      if (!location) throw new Error("No redirect header");
+      if (!location) {
+        throw new Error("No redirect header");
+      }
 
       const redirectUrl = new URL(location);
 
@@ -222,10 +245,14 @@ describe(Auth0Strategy, () => {
     try {
       await strategy.authenticate(request, sessionStorage, BASE_OPTIONS);
     } catch (error) {
-      if (!(error instanceof Response)) throw error;
+      if (!(error instanceof Response)) {
+        throw error;
+      }
       const location = error.headers.get("Location");
 
-      if (!location) throw new Error("No redirect header");
+      if (!location) {
+        throw new Error("No redirect header");
+      }
 
       const redirectUrl = new URL(location);
 
@@ -463,10 +490,14 @@ describe(Auth0Strategy, () => {
     try {
       await strategy.authenticate(request, sessionStorage, BASE_OPTIONS);
     } catch (error) {
-      if (!(error instanceof Response)) throw error;
+      if (!(error instanceof Response)) {
+        throw error;
+      }
       const location = error.headers.get("Location");
 
-      if (!location) throw new Error("No redirect header");
+      if (!location) {
+        throw new Error("No redirect header");
+      }
 
       const redirectUrl = new URL(location);
 
